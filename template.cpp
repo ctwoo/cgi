@@ -37,9 +37,9 @@ int main(int argc, char** argv) {
     size_t count = 0;
 
     process_args(argc, argv);
-    count = input.read();
+    count = input.read();              // fill input.kvp from ENV
 
-    std::cout << jsonify(input.kvp);
+    std::cout << jsonify(input.kvp);   // replace this line with your service specific capabilities
 
     return count;
 }
