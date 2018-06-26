@@ -1,8 +1,10 @@
 
 #include "cgi.h"
+#include "util.h"
 
 #include <cstdlib>
 #include <cstring>
+#include <algorithm>
 #include <iostream>
 #include <map>
 #include <string>
@@ -28,7 +30,7 @@ size_t cgi::read() {
     } else if (method == "POST") {
         std::string line;
         std::string doc;
-        constexpr auto limit = 1024u * 1024; 
+        constexpr auto limit = 1024u * 10u; 
         while (getline(std::cin, line) && doc.size() < limit) {
             doc += line;
             doc.append(1, '\n');
@@ -48,56 +50,16 @@ size_t cgi::parse_query_string(const string& qs) {
     std::istringstream iss(qs);
     string pair;
     while (std::getline(iss, pair, '&')) { 
-        auto pos = pair.find('=');
+        //const string space = " ";
+        //std::replace(pair.begin(), pair.end(), '+', ' ');
+        //find_replace(&pair, "%20", space);
+        auto decoded = decode(pair);
+        auto pos = decoded.find('=');
         if (pos != std::string::npos) {
-            kvp[pair.substr(0,pos)] = pair.substr(pos+1);
+            kvp[decoded.substr(0,pos)] = decoded.substr(pos+1);
         }
     }
     return kvp.size();
 }
-
-string jsonify(const string& message) {
-    string msg = "Content-type: application/json\n\n";
-    msg += "{\"msg\":\"" + message + "\"}\n"; 
-    return msg;
-}
-
-string jsonify(const std::map<string,string>& content) {
-    string msg = "Content-type: application/json\n\n";
-    msg += "{"; 
-    for (const auto& pair: content) {
-        auto ss = std::stringstream(pair.second);
-        double tmp;
-        ss >> tmp;
-        if (!ss || ss.rdbuf()->in_avail() > 0) {
-            msg += '"' + pair.first + "\":\"" + pair.second + "\","; 
-        } else {
-            msg += '"' + pair.first + "\":" + pair.second + ","; 
-        }
-    }
-    msg.pop_back();
-    msg += "}\n"; 
-    return msg;
-}
-
-/*
-int main(int argc, char** argv) {
-  cgi input;
-  size_t count = 0;
-
-  for (int i=1; i < argc; ++i) {
-    // for testing, allow setting query string on the command line
-    if (std::strncmp(argv[i], "QUERY_STRING", 12) == 0) {
-        setenv("REQUEST_METHOD", "GET", true);
-        string qs(argv[i]);
-        qs.erase(qs.begin(), qs.begin()+13);
-        setenv("QUERY_STRING", qs.c_str(), true);
-    }
-  }
-  count = input.read();
-  std::cout << jsonify(input.kvp);
-  return count;
-}
-*/
 
 
