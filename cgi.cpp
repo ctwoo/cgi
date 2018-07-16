@@ -17,7 +17,7 @@ using std::size_t;
 size_t cgi::read() {
     auto rm = std::getenv("REQUEST_METHOD");
     if (rm == nullptr) {
-        std::cout << jsonify("CGI Error: No method specified.");
+        std::cout << json_header() << jsonify("CGI Error: No method specified.");
         return 0;
     }
     string method(rm);
