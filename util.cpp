@@ -41,27 +41,46 @@ string decode(const string& source) {
     return dest.str();
 }
 
+string json_header () {
+    return "Content-type: application/json\n\n";
+}
+
 string jsonify(const string& message) {
-    string msg = "Content-type: application/json\n\n";
-    msg += "{\"msg\":\"" + message + "\"}\n"; 
-    return msg;
+    return "{\"msg\":\"" + message + "\"}\n"; 
+}
+
+bool numeric(string value) {
+    auto ss = std::stringstream(value);
+    double tmp;
+    ss >> tmp;
+    return !(!ss || ss.rdbuf()->in_avail() > 0);
+}
+
+string jsonify(const string& value, const string& uom) {
+    string msg = "{"; 
+    if (numeric(value)) {
+        msg += "\"value\": " + value + ',';
+    } else {
+        msg += "\"value\": \"" + value + "\",";
+    }
+    msg += "\"uom\": \"" + uom + "\"}";
+    return msg; 
 }
 
 string jsonify(const std::map<string,string>& content) {
-    string msg = "Content-type: application/json\n\n";
-    msg += "{"; 
+    string msg = "{"; 
+    string json = msg; 
     for (const auto& pair: content) {
-        auto ss = std::stringstream(pair.second);
-        double tmp;
-        ss >> tmp;
-        if (!ss || ss.rdbuf()->in_avail() > 0) {
-            msg += '"' + pair.first + "\":\"" + pair.second + "\","; 
+        if (numeric(pair.second)) {
+            msg += '"' + pair.first + "\":" + pair.second + ','; 
+        } else if (pair.second[0] == json[0] ) {
+            msg += '"' + pair.first + "\":" + pair.second + ','; 
         } else {
-            msg += '"' + pair.first + "\":" + pair.second + ","; 
+            msg += '"' + pair.first + "\":\"" + pair.second + "\","; 
         }
     }
     msg.pop_back();
-    msg += "}\n"; 
+    msg += "}"; 
     return msg;
 }
 

@@ -1,0 +1,52 @@
+# depslib dependency file v1.0
+1531760797 source:c:\users\camtom\documents\spawar\absolutehumidity\calc.cpp
+	"calc.h"
+	"util.h"
+	<iostream>
+	<map>
+	<string>
+
+1531154372 c:\users\camtom\documents\spawar\absolutehumidity\calc.h
+	<cmath>
+	<map>
+	<string>
+
+1531154372 c:\users\camtom\documents\spawar\absolutehumidity\util.h
+	<map>
+	<string>
+
+1531154372 source:c:\users\camtom\documents\spawar\absolutehumidity\cgi.cpp
+	"cgi.h"
+	"util.h"
+	<cstdlib>
+	<cstring>
+	<algorithm>
+	<iostream>
+	<map>
+	<string>
+	<sstream>
+	<utility>
+
+1531154372 c:\users\camtom\documents\spawar\absolutehumidity\cgi.h
+	<cstdlib>
+	<iostream>
+	<map>
+	<string>
+
+1531154372 source:c:\users\camtom\documents\spawar\absolutehumidity\util.cpp
+	"util.h"
+	<algorithm>
+	<map>
+	<string>
+	<sstream>
+	<utility>
+
+1531759513 source:c:\users\camtom\documents\spawar\absolutehumidity\main.cpp
+	"calc.h"
+	"cgi.h"
+	<cstring>
+	<cstdlib>
+	<iostream>
+	<map>
+	<string>
+

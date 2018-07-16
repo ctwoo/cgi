@@ -15,7 +15,7 @@ PROGS = cgi
 all: $(PROGS)
 
 cgi : clean
-	${CXX} ${CXXFLAGS} -o $@ util.cpp cgi.cpp template.cpp
+	${CXX} ${CXXFLAGS} -o $@ util.cpp calc.cpp cgi.cpp main.cpp
 
 clean:
 	rm -f $(PROGS)
